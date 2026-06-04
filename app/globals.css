@@ -2,26 +2,70 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-
-body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
-}
-
 @layer utilities {
   .text-balance {
     text-wrap: balance;
+  }
+
+  /* Film grain overlay — museum-like texture across the site */
+  .film-grain::after {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 9999;
+    opacity: 0.04;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    mix-blend-mode: multiply;
+  }
+
+  /* Story timeline — sepia for historical Rewa court era */
+  .timeline-sepia {
+    filter: sepia(0.45) contrast(1.05);
+  }
+
+  .timeline-present {
+    filter: none;
+  }
+}
+
+@layer base {
+  :root {
+    --background: 40 33% 97%;
+    --foreground: 24 33% 18%;
+    --card: 40 33% 97%;
+    --card-foreground: 24 33% 18%;
+    --popover: 40 33% 97%;
+    --popover-foreground: 24 33% 18%;
+    --primary: 24 33% 18%;
+    --primary-foreground: 40 56% 91%;
+    --secondary: 40 56% 91%;
+    --secondary-foreground: 24 33% 18%;
+    --muted: 40 40% 93%;
+    --muted-foreground: 24 20% 40%;
+    --accent: 38 90% 41%;
+    --accent-foreground: 40 33% 97%;
+    --destructive: 24 50% 35%;
+    --border: 40 30% 85%;
+    --input: 40 30% 85%;
+    --ring: 43 80% 46%;
+    --radius: 0.375rem;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-off-white text-heritage-brown font-sans antialiased;
+  }
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    @apply font-serif;
   }
 }

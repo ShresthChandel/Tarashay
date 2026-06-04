@@ -1,0 +1,22 @@
+You are helping build a platform for Rewa Supari Art.
+This is a cultural heritage platform, not a generic store.
+Project root is supari-art/.
+Stack: Next.js 14 App Router, TypeScript, Tailwind, MongoDB, Mongoose,
+NextAuth, Cloudinary, Razorpay, Stripe, Framer Motion, Resend.
+Always use TypeScript with proper types from /types/index.ts.
+Always use App Router patterns — never Pages Router.
+Use server components by default, client components only when needed.
+Phase 1: homepage uses placeholders only — wire to API in Phase 2.
+Color palette: #3D2B1F #F5ECD7 #C8860A #FAF7F2 #D4A017.
+Typography: Playfair Display for headings, Inter for body.
+Design is premium, museum-like, story-driven — never generic e-commerce.
+Every component should feel like it is presenting something rare and precious.
+Artisan stories and craft process should be present throughout — not just
+on dedicated pages.
+Always add 'use client' directive when using hooks or browser APIs.
+Use Framer Motion for entrance animations on all major sections.
+Images always via next/image with proper alt text describing the craft.
+MongoDB connection via lib/mongodb.ts singleton pattern.
+Never use any as a type.
+Environment variables: MONGODB_URI, NEXTAUTH_SECRET, CLOUDINARY_*,
+RAZORPAY_KEY_ID, RAZORPAY_KEY_SECRET, STRIPE_SECRET_KEY, RESEND_API_KEY.

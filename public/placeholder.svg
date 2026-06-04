@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="600" viewBox="0 0 800 600" role="img" aria-label="Rewa Supari Art placeholder">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#3D2B1F"/>
+      <stop offset="50%" style="stop-color:#5C4033"/>
+      <stop offset="100%" style="stop-color:#3D2B1F"/>
+    </linearGradient>
+    <pattern id="grain" width="4" height="4" patternUnits="userSpaceOnUse">
+      <circle cx="1" cy="1" r="0.5" fill="#D4A017" opacity="0.08"/>
+    </pattern>
+  </defs>
+  <rect width="800" height="600" fill="url(#bg)"/>
+  <rect width="800" height="600" fill="url(#grain)"/>
+  <ellipse cx="400" cy="280" rx="120" ry="160" fill="#C8860A" opacity="0.25"/>
+  <text x="400" y="420" text-anchor="middle" font-family="Georgia, serif" font-size="28" fill="#F5ECD7" opacity="0.9">$0>6/</text>
+  <text x="400" y="455" text-anchor="middle" font-family="sans-serif" font-size="14" fill="#D4A017" opacity="0.8">Rewa Supari Art</text>
+</svg>

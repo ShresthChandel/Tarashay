@@ -1,36 +1,64 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# तराशय (Tarashay) — Rewa Supari Art
+
+A cultural heritage platform for **Rewa Supari Art**, practiced exclusively by the Kunder family of Rewa, Madhya Pradesh since 1942.
+
+This is not a generic e-commerce site — it is a cultural embassy to witness, understand, and preserve a critically endangered craft.
+
+## Tech Stack
+
+- Next.js 14 (App Router) · TypeScript · Tailwind CSS · Shadcn/ui
+- Framer Motion · MongoDB Atlas · Mongoose · NextAuth.js
+- Cloudinary · Razorpay · Stripe · Resend · Zustand · Vercel
+
+## Phase 1 (Complete)
+
+- Project structure, Mongoose models, TypeScript types
+- Design system (heritage palette, Playfair + Inter, film grain)
+- Homepage with placeholder data (no DB on home yet)
+- Story page with 1942–present timeline
+- Stub routes and API shells for Phase 2
 
 ## Getting Started
 
-First, run the development server:
-
 ```bash
+cd supari-art
+cp .env.example .env.local
+# Add MONGODB_URI and other keys as needed
+
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Seed Database (Phase 2 local dev)
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+# Requires MONGODB_URI in .env.local
+npx tsx scripts/seed.ts
+```
 
-## Learn More
+## Environment Variables
 
-To learn more about Next.js, take a look at the following resources:
+See [`.env.example`](.env.example).
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Phase 2 Checklist
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- [ ] Wire homepage to `GET /api/artisans` and `GET /api/products`
+- [ ] Artisans, Shop, Product detail, Commission, Impact, Learn pages
+- [ ] NextAuth admin dashboard CRUD
+- [ ] Orders, Razorpay/Stripe webhooks
+- [ ] Zustand cart and checkout
+- [ ] GlobalMap + ImpactDashboard with live data
 
-## Deploy on Vercel
+## Design
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+| Token | Hex |
+|-------|-----|
+| Heritage brown | `#3D2B1F` |
+| Warm beige | `#F5ECD7` |
+| Ochre | `#C8860A` |
+| Off-white | `#FAF7F2` |
+| Gold | `#D4A017` |
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+All imagery placeholders: `/placeholder.svg`
