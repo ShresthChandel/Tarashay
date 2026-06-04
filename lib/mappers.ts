@@ -18,10 +18,6 @@ interface ProductLean extends Omit<IProduct, "artisan"> {
   artisan: string | PopulatedArtisanRef;
 }
 
-interface ArtisanLean extends IArtisan {
-  signatureProduct?: IProduct | string | null;
-}
-
 export function toArtisanCard(artisan: IArtisan): ArtisanCardDTO {
   return {
     name: artisan.name,

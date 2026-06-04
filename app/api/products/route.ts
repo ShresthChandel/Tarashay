@@ -1,4 +1,3 @@
-import type { FilterQuery } from "mongoose";
 import connectDB from "@/lib/mongodb";
 import Artisan from "@/models/Artisan";
 import Product from "@/models/Product";
@@ -25,7 +24,7 @@ export async function GET(request: Request) {
     const featured = searchParams.get("featured");
     const limitParam = searchParams.get("limit");
 
-    const filter: FilterQuery<typeof Product> = {};
+    const filter: Record<string, unknown> = {};
 
     if (statusParam) {
       filter.status = statusParam;
