@@ -29,7 +29,9 @@ const ShippingAddressSchema = new Schema(
 
 const OrderSchema = new Schema(
   {
-    buyer: { type: Schema.Types.ObjectId, ref: "User", required: true },
+    buyer: { type: Schema.Types.ObjectId, ref: "User" },
+    guestEmail: { type: String },
+    guestName: { type: String },
     items: [OrderLineItemSchema],
     totalINR: { type: Number, required: true },
     totalUSD: { type: Number, required: true },
@@ -40,6 +42,7 @@ const OrderSchema = new Schema(
       required: true,
     },
     paymentId: { type: String },
+    razorpayOrderId: { type: String },
     paymentStatus: { type: String, default: "pending" },
     shippingAddress: { type: ShippingAddressSchema, required: true },
     orderStatus: {

@@ -10,11 +10,19 @@ import {
   asStringArray,
 } from "@/lib/parse-body";
 
-export async function GET() {
+export async function GET(request: Request) {
   try {
     await connectDB();
 
-    const artisans = await Artisan.find({ isActive: true })
+    const { searchParams } = new URL(request.url);
+    const all = searchParams.get("all") === "true";
+
+    if (all) {
+      const auth = await requireAdmin();
+      if (!auth.authorized) return auth.response;
+    }
+
+    const artisans = await Artisan.find(all ? {} : { isActive: true })
       .populate("signatureProduct")
       .sort({ generation: 1 })
       .lean();

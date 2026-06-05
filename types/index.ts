@@ -174,11 +174,14 @@ export interface IProduct {
 
 export interface ICommission {
   _id?: string;
+  referenceNumber: string;
   buyerContact: BuyerContact;
   description: string;
+  category: ProductCategory | "something-new";
   referenceImages: string[];
   budget: BudgetRange;
-  assignedArtisan?: string;
+  howHeard?: string;
+  assignedArtisan?: string | ArtisanRef;
   status: CommissionStatus;
   progressUpdates: ProgressUpdate[];
   quotedPrice?: number;
@@ -189,7 +192,9 @@ export interface ICommission {
 
 export interface IOrder {
   _id?: string;
-  buyer: string;
+  buyer?: string;
+  guestEmail?: string;
+  guestName?: string;
   items: OrderLineItem[];
   totalINR: number;
   totalUSD: number;

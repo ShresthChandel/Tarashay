@@ -1,17 +1,22 @@
 import type { Metadata } from "next";
-import { ComingSoon } from "@/components/shared/ComingSoon";
+import { CheckoutFlow } from "@/components/checkout/CheckoutFlow";
 
 export const metadata: Metadata = {
-  title: "Checkout",
+  title: "Checkout — Tarashay",
   description: "Complete your purchase of Rewa Supari Art.",
   robots: { index: false, follow: false },
 };
 
 export default function CheckoutPage() {
   return (
-    <ComingSoon
-      title="Checkout"
-      description="Secure checkout with Razorpay and Stripe — arriving in Phase 3."
-    />
+    <div className="min-h-screen bg-off-white">
+      <header className="border-b border-heritage-brown/10 bg-warm-beige py-12 text-center">
+        <h1 className="font-serif text-3xl text-heritage-brown">Checkout</h1>
+        <p className="mt-2 text-sm text-heritage-brown/60">
+          Secure payment · Certificate of authenticity included
+        </p>
+      </header>
+      <CheckoutFlow />
+    </div>
   );
 }

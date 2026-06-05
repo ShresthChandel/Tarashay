@@ -1,5 +1,5 @@
 import mongoose, { Schema, models, model } from "mongoose";
-import { CommissionStatus, Currency } from "@/types";
+import { CommissionStatus, Currency, ProductCategory } from "@/types";
 
 const BuyerContactSchema = new Schema(
   {
@@ -36,10 +36,17 @@ const ProgressUpdateSchema = new Schema(
 
 const CommissionSchema = new Schema(
   {
+    referenceNumber: { type: String, required: true, unique: true, index: true },
     buyerContact: { type: BuyerContactSchema, required: true },
     description: { type: String, required: true },
+    category: {
+      type: String,
+      enum: [...Object.values(ProductCategory), "something-new"],
+      default: ProductCategory.CUSTOM,
+    },
     referenceImages: [{ type: String }],
     budget: { type: BudgetSchema, required: true },
+    howHeard: { type: String },
     assignedArtisan: { type: Schema.Types.ObjectId, ref: "Artisan" },
     status: {
       type: String,
