@@ -24,6 +24,14 @@ This is not a generic e-commerce site — it is a cultural embassy to witness, u
 - Artisans listing and `/artisans/[slug]` profile pages
 - Updated `ArtisanCard` (full `IArtisan`, default export, gold hover)
 
+## Phase 2B (Complete)
+
+- Shop page with category/sort filters (`revalidate: 1800`)
+- Product detail page (gallery, story, craft stats, making steps, purchase)
+- `ProductCard` with full `IProductPopulated`, sold overlay, gold hover
+- Zustand cart with localStorage persist + Sonner toasts
+- `CartSheet` in Navbar + `/checkout` stub
+
 ## Getting Started
 
 ```bash
@@ -40,11 +48,15 @@ Open [http://localhost:3000](http://localhost:3000).
 ## Seed Database (local dev)
 
 ```bash
-# Requires MONGODB_URI in .env.local
-npx tsx scripts/seed.ts
+# Requires MONGODB_URI in .env.local (scripts load it automatically)
+npm run seed
+```
 
+If you see `querySrv ECONNREFUSED` on Windows, your router DNS may block Node SRV lookups. The app sets public DNS (8.8.8.8 / 1.1.1.1) in `lib/mongodb.ts` automatically. Alternatively, use Atlas’s non-SRV connection string in `.env.local`.
+
+```bash
 # Create admin for POST/PUT API routes
-npx tsx scripts/create-admin.ts admin@tarashay.local yourpassword "Admin"
+npm run create-admin -- admin@tarashay.local yourpassword "Admin"
 ```
 
 Sign in at `/admin` (NextAuth) before calling admin APIs, or use a session cookie from NextAuth.
@@ -57,10 +69,11 @@ See [`.env.example`](.env.example).
 
 - [x] Wire homepage to `GET /api/artisans` and `GET /api/products`
 - [x] Artisans listing + profile pages
-- [ ] Shop, Product detail, Commission, Impact, Learn pages
+- [x] Shop + Product detail + Cart
+- [ ] Commission, Impact, Learn pages
+- [ ] Checkout (Razorpay / Stripe)
 - [ ] NextAuth admin dashboard CRUD
 - [ ] Orders, Razorpay/Stripe webhooks
-- [ ] Zustand cart and checkout
 - [ ] GlobalMap + ImpactDashboard with live data
 
 ## Design

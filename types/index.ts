@@ -244,6 +244,36 @@ export interface ProductCardDTO {
   status: ProductStatus;
 }
 
+/** Artisan ref when product.artisan is populated from API */
+export interface ArtisanRef {
+  _id?: string;
+  name: string;
+  slug: string;
+  profilePhoto?: string;
+  generation?: number;
+  specialization?: string;
+  bio?: string;
+  story?: string;
+  awardsWon?: string[];
+  featuredIn?: string[];
+}
+
+/** Product with populated artisan — used in shop cards and cart */
+export interface IProductPopulated extends Omit<IProduct, "artisan"> {
+  artisan: ArtisanRef;
+}
+
+export interface CartItem {
+  product: IProductPopulated;
+  quantity: number;
+}
+
+export type ProductSortOption =
+  | "newest"
+  | "hours"
+  | "price-asc"
+  | "price-desc";
+
 export interface TimelineEvent {
   year: string;
   title: string;

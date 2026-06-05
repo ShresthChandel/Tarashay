@@ -1,7 +1,8 @@
 /**
  * Create an admin user for API testing:
- * npx tsx scripts/create-admin.ts admin@tarashay.local yourpassword "Admin Name"
+ * npm run create-admin -- admin@tarashay.local yourpassword "Admin Name"
  */
+import "../lib/load-env";
 import bcrypt from "bcryptjs";
 import connectDB from "../lib/mongodb";
 import User from "../models/User";

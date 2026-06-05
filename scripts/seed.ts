@@ -1,10 +1,11 @@
 /**
  * Manual seed script — run after configuring MONGODB_URI:
- * npx tsx scripts/seed.ts
+ * npm run seed
  *
  * Seeds artisans and products matching lib/placeholders/home.ts
  */
 
+import "../lib/load-env";
 import connectDB from "../lib/mongodb";
 import Artisan from "../models/Artisan";
 import Product from "../models/Product";

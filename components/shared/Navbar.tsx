@@ -5,6 +5,7 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import { Menu } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { CartSheet } from "@/components/shared/CartSheet";
 import {
   Sheet,
   SheetContent,
@@ -42,19 +43,24 @@ export function Navbar() {
           </span>
         </Link>
 
-        <ul className="hidden items-center gap-8 md:flex">
-          {navLinks.map((link) => (
-            <li key={link.href}>
-              <Link
-                href={link.href}
-                className="font-sans text-sm tracking-wide text-heritage-brown/80 transition-colors hover:text-ochre"
-              >
-                {link.label}
-              </Link>
-            </li>
-          ))}
-        </ul>
+        <div className="hidden items-center gap-6 md:flex">
+          <ul className="flex items-center gap-8">
+            {navLinks.map((link) => (
+              <li key={link.href}>
+                <Link
+                  href={link.href}
+                  className="font-sans text-sm tracking-wide text-heritage-brown/80 transition-colors hover:text-ochre"
+                >
+                  {link.label}
+                </Link>
+              </li>
+            ))}
+          </ul>
+          <CartSheet />
+        </div>
 
+        <div className="flex items-center gap-2 md:hidden">
+          <CartSheet />
         <Sheet open={open} onOpenChange={setOpen}>
           <SheetTrigger asChild className="md:hidden">
             <Button
@@ -90,6 +96,7 @@ export function Navbar() {
             </ul>
           </SheetContent>
         </Sheet>
+        </div>
       </nav>
     </motion.header>
   );

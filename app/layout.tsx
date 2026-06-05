@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Inter, Playfair_Display, Noto_Sans_Devanagari } from "next/font/google";
+import { Providers } from "@/components/shared/Providers";
 import "./globals.css";
 
 const inter = Inter({
@@ -47,7 +48,7 @@ export default function RootLayout({
       <body
         className={`${inter.variable} ${playfair.variable} ${devanagari.variable} film-grain min-h-screen`}
       >
-        {children}
+        <Providers>{children}</Providers>
       </body>
     </html>
   );

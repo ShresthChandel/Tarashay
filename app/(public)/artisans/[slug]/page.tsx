@@ -7,6 +7,7 @@ import { ArtisanStatsRow } from "@/components/artisan/ArtisanStatsRow";
 import { ArtisanVideoSection } from "@/components/artisan/ArtisanVideoSection";
 import { ArtisanCommissionCTA } from "@/components/artisan/ArtisanCommissionCTA";
 import { ProductCard } from "@/components/product/ProductCard";
+import { dtoToPopulatedProduct } from "@/lib/product-utils";
 import {
   fetchArtisanBySlug,
   fetchProductsByArtisanSlug,
@@ -157,7 +158,7 @@ export default async function ArtisanProfilePage({ params }: PageProps) {
               {products.map((product, index) => (
                 <ProductCard
                   key={product.slug}
-                  product={product}
+                  product={dtoToPopulatedProduct(product)}
                   index={index}
                 />
               ))}

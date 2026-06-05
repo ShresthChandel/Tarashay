@@ -23,13 +23,21 @@ export async function GET(request: Request) {
     const statusParam = searchParams.get("status");
     const featured = searchParams.get("featured");
     const limitParam = searchParams.get("limit");
+    const sortParam = searchParams.get("sort");
+    const excludeSlug = searchParams.get("exclude");
 
     const filter: Record<string, unknown> = {};
 
-    if (statusParam) {
+    if (statusParam === "all") {
+      // Shop page — show available, sold, reserved, commissioned
+    } else if (statusParam) {
       filter.status = statusParam;
     } else {
       filter.status = ProductStatus.AVAILABLE;
+    }
+
+    if (excludeSlug) {
+      filter.slug = { $ne: excludeSlug };
     }
 
     if (category) {
@@ -51,9 +59,18 @@ export async function GET(request: Request) {
       filter.artisan = artisan._id;
     }
 
+    let sortKey: Record<string, 1 | -1> = { createdAt: -1 };
+    if (sortParam === "hours") {
+      sortKey = { hoursToCreate: -1 };
+    } else if (sortParam === "price-asc") {
+      sortKey = { "price.INR": 1 };
+    } else if (sortParam === "price-desc") {
+      sortKey = { "price.INR": -1 };
+    }
+
     let query = Product.find(filter)
-      .populate("artisan", "name slug profilePhoto")
-      .sort({ createdAt: -1 });
+      .populate("artisan", "name slug profilePhoto generation")
+      .sort(sortKey);
 
     const limit = limitParam ? parseInt(limitParam, 10) : undefined;
     if (limit && !Number.isNaN(limit)) {

@@ -5,29 +5,26 @@ import Link from "next/link";
 import { motion } from "framer-motion";
 import { Clock } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
-  CardDescription,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import type { ProductCardDTO } from "@/types";
+import type { IProductPopulated } from "@/types";
+import { ProductStatus } from "@/types";
+import { formatINR, getCategoryLabel } from "@/lib/product-utils";
 
-interface ProductCardProps {
-  product: ProductCardDTO;
+export interface ProductCardProps {
+  product: IProductPopulated;
   index?: number;
 }
 
-function formatINR(amount: number): string {
-  return new Intl.NumberFormat("en-IN", {
-    style: "currency",
-    currency: "INR",
-    maximumFractionDigits: 0,
-  }).format(amount);
-}
-
 export function ProductCard({ product, index = 0 }: ProductCardProps) {
+  const photo = product.photos[0] ?? "/placeholder.svg";
+  const isSold = product.status === ProductStatus.SOLD;
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 24 }}
@@ -35,42 +32,71 @@ export function ProductCard({ product, index = 0 }: ProductCardProps) {
       viewport={{ once: true, margin: "-40px" }}
       transition={{ duration: 0.5, delay: index * 0.08 }}
     >
-      <Link href={`/shop/${product.slug}`}>
-        <Card className="group overflow-hidden border-heritage-brown/10 bg-off-white transition-shadow hover:shadow-lg">
+      <Card className="group overflow-hidden border-heritage-brown/10 bg-off-white transition-all duration-300 hover:-translate-y-1 hover:border-gold hover:shadow-xl">
+        <Link href={`/shop/${product.slug}`} className="block">
           <div className="relative aspect-square overflow-hidden bg-warm-beige">
             <Image
-              src={product.photo}
-              alt={`${product.title} — hand-carved Rewa supari art by ${product.artisanName}`}
+              src={photo}
+              alt={`${product.title} — hand-carved Rewa supari art by ${product.artisan.name}`}
               fill
               className="object-cover transition-transform duration-700 group-hover:scale-105"
-              sizes="(max-width: 768px) 100vw, 25vw"
+              sizes="(max-width: 768px) 100vw, 33vw"
             />
             {product.isOneOfAKind && (
-              <Badge className="absolute left-3 top-3 bg-heritage-brown/90 text-warm-beige border-0">
+              <Badge className="absolute left-3 top-3 border-0 bg-gold text-heritage-brown">
                 One of a Kind
               </Badge>
             )}
+            <Badge
+              variant="secondary"
+              className="absolute right-3 top-3 border-0 bg-heritage-brown/80 text-warm-beige"
+            >
+              {getCategoryLabel(product.category)}
+            </Badge>
+            {isSold && (
+              <div className="absolute inset-0 flex items-center justify-center bg-heritage-brown/50">
+                <span className="font-serif text-lg tracking-widest text-warm-beige uppercase">
+                  Sold
+                </span>
+              </div>
+            )}
           </div>
-          <CardHeader className="pb-2">
-            <CardTitle className="font-serif text-lg text-heritage-brown line-clamp-2">
+        </Link>
+        <CardHeader className="pb-2">
+          <Link href={`/shop/${product.slug}`}>
+            <CardTitle className="font-serif text-lg text-heritage-brown line-clamp-2 hover:text-ochre">
               {product.title}
             </CardTitle>
-            <CardDescription className="font-sans text-sm">
-              by{" "}
-              <span className="text-ochre">{product.artisanName}</span>
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="flex items-center justify-between pt-0">
-            <span className="flex items-center gap-1 font-sans text-xs text-heritage-brown/60">
-              <Clock className="h-3.5 w-3.5" />
-              {product.hoursToCreate} hours to create
-            </span>
-            <span className="font-serif text-ochre">
+          </Link>
+          <p className="font-sans text-sm text-heritage-brown/70">
+            by{" "}
+            <Link
+              href={`/artisans/${product.artisan.slug}`}
+              className="text-ochre hover:underline"
+            >
+              {product.artisan.name}
+            </Link>
+          </p>
+        </CardHeader>
+        <CardContent className="space-y-3 pt-0">
+          <span className="flex items-center gap-1.5 font-sans text-sm text-ochre">
+            <Clock className="h-4 w-4" />
+            {product.hoursToCreate} hours of craftsmanship
+          </span>
+          <div className="flex items-center justify-between">
+            <span className="font-serif text-lg text-heritage-brown">
               {formatINR(product.price.INR)}
             </span>
-          </CardContent>
-        </Card>
-      </Link>
+          </div>
+          <Button
+            asChild
+            variant="ghost"
+            className="w-full translate-y-2 border border-transparent font-sans text-ochre opacity-0 transition-all group-hover:translate-y-0 group-hover:border-gold/30 group-hover:opacity-100"
+          >
+            <Link href={`/shop/${product.slug}`}>View Story →</Link>
+          </Button>
+        </CardContent>
+      </Card>
     </motion.div>
   );
 }

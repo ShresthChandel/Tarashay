@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import { ProductCard } from "@/components/product/ProductCard";
+import { dtoToPopulatedProduct } from "@/lib/product-utils";
 import type { ProductCardDTO } from "@/types";
 
 interface FeaturedProductsProps {
@@ -29,7 +30,11 @@ export function FeaturedProducts({ products }: FeaturedProductsProps) {
         </motion.div>
         <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
           {products.map((product, index) => (
-            <ProductCard key={product.slug} product={product} index={index} />
+            <ProductCard
+              key={product.slug}
+              product={dtoToPopulatedProduct(product)}
+              index={index}
+            />
           ))}
         </div>
       </div>

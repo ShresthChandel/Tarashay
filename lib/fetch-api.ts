@@ -1,10 +1,18 @@
-import type { ArtisanCardDTO, IArtisan, ProductCardDTO } from "@/types";
+import type {
+  ArtisanCardDTO,
+  IArtisan,
+  IProductPopulated,
+  ProductCardDTO,
+  ProductSortOption,
+} from "@/types";
 import {
   PLACEHOLDER_ARTISANS,
   PLACEHOLDER_PRODUCTS,
 } from "@/lib/placeholders/home";
+import { mapApiProductToPopulated } from "@/lib/product-utils";
 
 const REVALIDATE = 3600;
+const SHOP_REVALIDATE = 1800;
 
 function getBaseUrl(): string {
   if (process.env.NEXT_PUBLIC_SITE_URL) {
@@ -50,6 +58,24 @@ export async function fetchFeaturedArtisans(limit = 3): Promise<ArtisanCardDTO[]
   }));
 }
 
+function mapToProductCardDTO(
+  raw: Record<string, unknown>
+): ProductCardDTO {
+  const p = mapApiProductToPopulated(raw);
+  return {
+    title: p.title,
+    slug: p.slug,
+    artisanName: p.artisan.name,
+    artisanSlug: p.artisan.slug,
+    photo: p.photos[0] ?? "/placeholder.svg",
+    hoursToCreate: p.hoursToCreate,
+    price: p.price,
+    isOneOfAKind: p.isOneOfAKind,
+    category: p.category,
+    status: p.status,
+  };
+}
+
 export async function fetchFeaturedProducts(
   limit = 4
 ): Promise<ProductCardDTO[]> {
@@ -69,31 +95,85 @@ export async function fetchFeaturedProducts(
     if (!json.success || !json.data?.length) {
       return PLACEHOLDER_PRODUCTS;
     }
-    return json.data.map((p) => {
-      const artisan = p.artisan as
-        | { name?: string; slug?: string }
-        | string
-        | undefined;
-      const artisanObj =
-        typeof artisan === "object" && artisan !== null ? artisan : null;
-      const price = p.price as ProductCardDTO["price"];
-      return {
-        title: String(p.title),
-        slug: String(p.slug),
-        artisanName: artisanObj?.name ?? "Kunder Family",
-        artisanSlug: artisanObj?.slug ?? "",
-        photo: Array.isArray(p.photos) && p.photos[0]
-          ? String(p.photos[0])
-          : "/placeholder.svg",
-        hoursToCreate: Number(p.hoursToCreate),
-        price,
-        isOneOfAKind: Boolean(p.isOneOfAKind),
-        category: p.category as ProductCardDTO["category"],
-        status: p.status as ProductCardDTO["status"],
-      };
-    });
+    return json.data.map(mapToProductCardDTO);
   } catch {
     return PLACEHOLDER_PRODUCTS;
+  }
+}
+
+export interface ShopFetchParams {
+  category?: string;
+  artisan?: string;
+  sort?: ProductSortOption;
+}
+
+export async function fetchShopProducts(
+  params: ShopFetchParams = {}
+): Promise<IProductPopulated[]> {
+  try {
+    const search = new URLSearchParams({ status: "all" });
+    if (params.category && params.category !== "all") {
+      search.set("category", params.category);
+    }
+    if (params.artisan) {
+      search.set("artisan", params.artisan);
+    }
+    if (params.sort) {
+      search.set("sort", params.sort);
+    }
+    const res = await fetch(`${getBaseUrl()}/api/products?${search}`, {
+      next: { revalidate: SHOP_REVALIDATE },
+    });
+    if (!res.ok) return [];
+    const json = (await res.json()) as ApiListResponse<
+      Array<Record<string, unknown>>
+    >;
+    if (!json.success || !json.data) return [];
+    return json.data.map(mapApiProductToPopulated);
+  } catch {
+    return [];
+  }
+}
+
+export async function fetchProductBySlug(
+  slug: string
+): Promise<IProductPopulated | null> {
+  try {
+    const res = await fetch(`${getBaseUrl()}/api/products/${slug}`, {
+      next: { revalidate: SHOP_REVALIDATE },
+    });
+    if (!res.ok) return null;
+    const json = (await res.json()) as ApiListResponse<Record<string, unknown>>;
+    if (!json.success || !json.data) return null;
+    return mapApiProductToPopulated(json.data);
+  } catch {
+    return null;
+  }
+}
+
+export async function fetchRelatedProducts(
+  artisanSlug: string,
+  excludeSlug: string,
+  limit = 3
+): Promise<IProductPopulated[]> {
+  try {
+    const params = new URLSearchParams({
+      artisan: artisanSlug,
+      status: "all",
+      exclude: excludeSlug,
+      limit: String(limit),
+    });
+    const res = await fetch(`${getBaseUrl()}/api/products?${params}`, {
+      next: { revalidate: SHOP_REVALIDATE },
+    });
+    if (!res.ok) return [];
+    const json = (await res.json()) as ApiListResponse<
+      Array<Record<string, unknown>>
+    >;
+    if (!json.success || !json.data) return [];
+    return json.data.map(mapApiProductToPopulated);
+  } catch {
+    return [];
   }
 }
 
@@ -128,26 +208,7 @@ export async function fetchProductsByArtisanSlug(
       Array<Record<string, unknown>>
     >;
     if (!json.success || !json.data) return [];
-    return json.data.map((p) => {
-      const artisan = p.artisan as
-        | { name?: string; slug?: string }
-        | undefined;
-      const price = p.price as ProductCardDTO["price"];
-      return {
-        title: String(p.title),
-        slug: String(p.slug),
-        artisanName: artisan?.name ?? "Kunder Family",
-        artisanSlug: artisan?.slug ?? artisanSlug,
-        photo: Array.isArray(p.photos) && p.photos[0]
-          ? String(p.photos[0])
-          : "/placeholder.svg",
-        hoursToCreate: Number(p.hoursToCreate),
-        price,
-        isOneOfAKind: Boolean(p.isOneOfAKind),
-        category: p.category as ProductCardDTO["category"],
-        status: p.status as ProductCardDTO["status"],
-      };
-    });
+    return json.data.map(mapToProductCardDTO);
   } catch {
     return [];
   }
@@ -156,4 +217,21 @@ export async function fetchProductsByArtisanSlug(
 export async function fetchAllArtisanSlugs(): Promise<string[]> {
   const artisans = await fetchArtisansList();
   return artisans.map((a) => a.slug);
+}
+
+export async function fetchAllProductSlugs(): Promise<string[]> {
+  try {
+    const res = await fetch(
+      `${getBaseUrl()}/api/products?status=all`,
+      { next: { revalidate: SHOP_REVALIDATE } }
+    );
+    if (!res.ok) return [];
+    const json = (await res.json()) as ApiListResponse<
+      Array<Record<string, unknown>>
+    >;
+    if (!json.success || !json.data) return [];
+    return json.data.map((p) => String(p.slug));
+  } catch {
+    return [];
+  }
 }
