@@ -1,4 +1,6 @@
 import type { Metadata } from "next";
+
+export const dynamic = "force-dynamic";
 import Link from "next/link";
 import { Hand, Leaf, Sprout } from "lucide-react";
 import { getImpactStats } from "@/lib/impact-stats";

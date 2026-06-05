@@ -1,3 +1,6 @@
+export const dynamic = "force-dynamic";
+export const runtime = "nodejs";
+
 import connectDB from "@/lib/mongodb";
 import Artisan from "@/models/Artisan";
 import { apiSuccess, apiError } from "@/lib/api-response";

@@ -22,7 +22,18 @@ const devanagari = Noto_Sans_Devanagari({
   display: "swap",
 });
 
+function siteUrl(): string {
+  if (process.env.NEXT_PUBLIC_SITE_URL) {
+    return process.env.NEXT_PUBLIC_SITE_URL;
+  }
+  if (process.env.VERCEL_URL) {
+    return `https://${process.env.VERCEL_URL}`;
+  }
+  return "http://localhost:3000";
+}
+
 export const metadata: Metadata = {
+  metadataBase: new URL(siteUrl()),
   title: {
     default: "तराशय | Rewa Supari Art — Cultural Heritage",
     template: "%s | तराशय",

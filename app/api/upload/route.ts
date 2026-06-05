@@ -1,3 +1,6 @@
+export const dynamic = "force-dynamic";
+export const runtime = "nodejs";
+
 import { apiSuccess, apiError } from "@/lib/api-response";
 
 export async function POST(request: Request) {

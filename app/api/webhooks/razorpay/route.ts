@@ -1,3 +1,6 @@
+export const dynamic = "force-dynamic";
+export const runtime = "nodejs";
+
 import crypto from "crypto";
 import connectDB from "@/lib/mongodb";
 import Order from "@/models/Order";
