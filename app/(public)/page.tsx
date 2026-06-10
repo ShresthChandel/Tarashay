@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { HeroSection } from "@/components/home/HeroSection";
 import { CraftCounter } from "@/components/home/CraftCounter";
 import { OriginTeaser } from "@/components/home/OriginTeaser";
+import { ArtisansBanner } from "@/components/home/ArtisansBanner";
 import { FeaturedProducts } from "@/components/home/FeaturedProducts";
 import { ImpactStrip } from "@/components/home/ImpactStrip";
 import { FamilyQuote } from "@/components/home/FamilyQuote";
@@ -63,7 +64,8 @@ export default async function HomePage() {
       <section className="bg-off-white py-24">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="mb-12 text-center">
-            <h2 className="font-serif text-3xl text-heritage-brown sm:text-4xl">
+            <p className="section-eyebrow">कारीगर</p>
+            <h2 className="mt-3 font-serif text-3xl text-heritage-brown sm:text-4xl">
               The Hands Behind the Art
             </h2>
             <p className="mx-auto mt-4 max-w-2xl font-sans text-heritage-brown/70">
@@ -71,6 +73,9 @@ export default async function HomePage() {
               born in the maharaja&apos;s court.
             </p>
           </div>
+
+          <ArtisansBanner />
+
           <div className="grid gap-8 md:grid-cols-3">
             {featuredArtisans.map((artisan, index) => (
               <ArtisanCard

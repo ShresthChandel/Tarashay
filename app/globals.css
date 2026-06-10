@@ -7,6 +7,30 @@
     text-wrap: balance;
   }
 
+  .devanagari {
+    font-family: var(--font-devanagari), serif;
+  }
+
+  .section-eyebrow {
+    @apply devanagari text-[clamp(1.25rem,4vw,1.75rem)] font-semibold tracking-wide text-ochre;
+  }
+
+  .counter-pulse {
+    animation: counter-pulse 2s ease-in-out infinite;
+  }
+
+  @keyframes counter-pulse {
+    0%,
+    100% {
+      opacity: 1;
+      transform: scale(1);
+    }
+    50% {
+      opacity: 0.85;
+      transform: scale(1.02);
+    }
+  }
+
   /* Film grain overlay — museum-like texture across the site */
   .film-grain::after {
     content: "";
